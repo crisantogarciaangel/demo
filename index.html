@@ -7,16 +7,16 @@
   <style>
     :root{
       /* Paleta chic */
-      --bg:#fff5f9;           /* rosa muy claro */
-      --bg2:#fde7ff;          /* lila muy claro */
-      --panel:#ffffff;        /* blanco panel */
-      --muted:#6b7280;        /* texto secundario */
-      --text:#1f2937;         /* texto principal */
-      --primary:#ec4899;      /* pink-500 */
-      --primary-2:#f472b6;    /* pink-400 */
-      --accent:#a78bfa;       /* violet-400 */
-      --accent-2:#c4b5fd;     /* violet-300 */
-      --success:#22c55e;      /* green-500 */
+      --bg:#fff5f9;
+      --bg2:#fde7ff;
+      --panel:#ffffff;
+      --muted:#6b7280;
+      --text:#1f2937;
+      --primary:#ec4899;
+      --primary-2:#f472b6;
+      --accent:#a78bfa;
+      --accent-2:#c4b5fd;
+      --success:#22c55e;
       --shadow:0 14px 30px rgba(236,72,153,.15);
       --card-shadow:0 12px 24px rgba(167,139,250,.25);
       --radius:18px;
@@ -25,7 +25,7 @@
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      margin:0; font-family: ui-sans-serif, system-ui;
       background:
         radial-gradient(1400px 900px at 15% 10%, var(--bg2) 0%, var(--bg) 40%),
         radial-gradient(1200px 800px at 85% 90%, #ffe3ef 0%, var(--bg) 45%);
@@ -36,13 +36,6 @@
       display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px;
     }
     h1{font-size:clamp(22px, 3vw, 34px); margin:0; letter-spacing:.4px}
-    .brand{display:flex; align-items:center; gap:12px}
-    .badge{
-      width:40px; height:40px; border-radius:999px;
-      background:linear-gradient(135deg, var(--primary), var(--accent));
-      box-shadow:0 10px 18px rgba(236,72,153,.25);
-      color:white; display:grid; place-items:center; font-weight:800;
-    }
     .subtitle{color:var(--muted); font-size:14px}
 
     .panel{
@@ -83,28 +76,22 @@
       backface-visibility:hidden; -webkit-backface-visibility:hidden; font-size:clamp(28px, 6vw, 44px); overflow:hidden;
     }
 
-    /* Cara frontal con monograma DM + corazón */
     .front{
       border:1px solid rgba(220,176,210,.5);
       background:
         radial-gradient(10px 10px at 25% 30%, rgba(252,231,243,.85) 45%, transparent 46%),
         radial-gradient(8px 8px at 70% 65%, rgba(221,214,254,.9) 45%, transparent 46%),
         linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
-      position:relative;
+      font-size:clamp(28px, 6vw, 44px);
+      display:grid;
+      place-items:center;
     }
     .front::after{
       content:"";
       position:absolute; inset:0; border-radius:var(--radius);
       box-shadow: inset 0 0 0 2px rgba(167,139,250,.35), 0 10px 20px rgba(188,116,160,.18);
     }
-    .front .monogram{
-      display:grid; place-items:center; text-align:center;
-      color:#ef5aa9; font-weight:900; line-height:1; letter-spacing:.5px;
-    }
-    .front .monogram .dm{ font-size:clamp(16px, 4.5vw, 24px); }
-    .front .monogram .heart{ font-size:clamp(18px, 5vw, 26px); margin-top:2px; color:#d946ef; }
 
-    /* Cara trasera con la imagen */
     .back{
       transform:rotateY(180deg);
       background:linear-gradient(180deg, rgba(252,231,243,.95), rgba(221,214,254,.9));
@@ -137,11 +124,8 @@
   <div class="container">
     <header>
       <div>
-        <div class="brand">
-          <div class="badge">DM</div>
-          <h1>DULCE MIR — Memorama</h1>
-        </div>
-        <div class="subtitle">Empareja todas las cartas</div>
+        <h1>DULCE MIR — Memorama</h1>
+        <div class="subtitle">Empareja todas las cartas. Estilo chic ✨</div>
       </div>
       <div class="panel" role="group" aria-label="Controles del juego">
         <button id="newGame" class="control">🔄 Nuevo juego</button>
@@ -154,7 +138,7 @@
     <section id="board" class="board" aria-label="Tablero de memorama"></section>
   </div>
 
-  <div id="win" class="modal" role="dialog" aria-modal="true" aria-labelledby="winTitle" aria-describedby="winDesc">
+  <div id="win" class="modal" role="dialog" aria-modal="true">
     <div class="modal-card">
       <h2 id="winTitle">¡Eres increíble! ✨</h2>
       <p id="winDesc">¡Completaste todas las parejas con estilo!</p>
@@ -211,12 +195,7 @@
         btn.setAttribute('data-symbol', symbol);
         btn.innerHTML = `
           <div class="card-inner">
-            <div class="face front">
-              <div class="monogram">
-                <div class="dm">DULCE MIR</div>
-                <div class="heart">♥</div>
-              </div>
-            </div>
+            <div class="face front">❓</div>
             <div class="face back"><img src="${symbol}" alt="carta"/></div>
           </div>
         `;
