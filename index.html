@@ -1,10 +1,225 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Hola Mundo</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Memorama — HTML + JavaScript</title>
+  <style>
+    :root{
+      --bg:#0f172a;            /* slate-900 */
+      --panel:#111827;         /* gray-900 */
+      --muted:#94a3b8;         /* slate-400 */
+      --text:#e5e7eb;          /* gray-200 */
+      --primary:#22c55e;       /* green-500 */
+      --accent:#38bdf8;        /* sky-400 */
+      --danger:#ef4444;        /* red-500 */
+      --card:#1f2937;          /* gray-800 */
+      --cardEdge:#0ea5e9;      /* sky-500 */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 20% 10%, #0b1225 0%, var(--bg) 35%), radial-gradient(1200px 800px at 80% 90%, #0b1a2f 0%, var(--bg) 40%);
+      color:var(--text); display:grid; place-items:center; padding:24px;
+    }
+    .container{width:min(1100px, 100%);}
+    header{
+      display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px;
+    }
+    h1{font-size:clamp(20px, 3vw, 32px); margin:0; letter-spacing:.4px}
+    .subtitle{color:var(--muted); font-size:14px}
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:14px 16px; box-shadow:var(--shadow);
+      display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    }
+    .stat{font-size:14px; color:var(--muted)}
+    .stat b{color:var(--text)}
+    button.control{
+      background:linear-gradient(180deg, #10b981, #059669);
+      border:none; color:white; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600; box-shadow:0 6px 18px rgba(16,185,129,.35);
+      transition: transform .08s ease, filter .2s ease; outline:none;
+    }
+    button.control:hover{filter:brightness(1.05)}
+    button.control:active{transform:translateY(1px) scale(.99)}
+
+    /* Board */
+    .board{
+      display:grid; gap:14px; padding:16px; background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08); border-radius:20px; box-shadow:var(--shadow);
+      grid-template-columns: repeat(4, minmax(74px, 1fr));
+    }
+    @media (max-width:520px){
+      .board{grid-template-columns: repeat(4, minmax(64px, 1fr)); gap:10px; padding:12px}
+    }
+
+    /* Card */
+    .card{ position:relative; aspect-ratio: 1 / 1; border:0; background:none; padding:0; cursor:pointer; outline:none; }
+    .card[disabled]{cursor:default}
+    .card-inner{ position:absolute; inset:0; border-radius:16px; transform-style:preserve-3d; transition: transform .5s ease; box-shadow: 0 12px 24px rgba(0,0,0,.35); }
+    .card:not(.matched):focus-visible .card-inner{ box-shadow:0 0 0 3px var(--accent), 0 12px 24px rgba(0,0,0,.35); }
+    .card.flipped .card-inner{ transform:rotateY(180deg); }
+
+    .face{ position:absolute; inset:0; display:grid; place-items:center; border-radius:16px; backface-visibility:hidden; -webkit-backface-visibility:hidden; font-size:clamp(28px, 6vw, 44px); }
+    .front{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .front::after{ content:""; position:absolute; inset:0; border-radius:16px; box-shadow: inset 0 0 0 2px rgba(14,165,233,.35), 0 10px 20px rgba(0,0,0,.25); }
+    .back{ transform:rotateY(180deg); background:radial-gradient(120px 120px at 30% 25%, rgba(56,189,248,.20), rgba(56,189,248,.05)); border:1px solid rgba(255,255,255,.10); }
+
+    .card.matched .back{ animation:pop .45s ease; box-shadow:0 0 0 2px rgba(34,197,94,.65), 0 16px 30px rgba(34,197,94,.25); }
+    @keyframes pop{0%{transform:rotateY(180deg) scale(1)} 50%{transform:rotateY(180deg) scale(1.06)} 100%{transform:rotateY(180deg) scale(1)}}
+
+    /* Modal */
+    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(2,6,23,.6); backdrop-filter: blur(6px); }
+    .modal.show{ display:flex }
+    .modal-card{ background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:22px 20px; width:min(420px, 92%); text-align:center; box-shadow:var(--shadow); }
+    .modal-card h2{ margin:0 0 6px 0 }
+    .modal-card p{ color:var(--muted); margin:6px 0 16px }
+    .chips{ display:flex; gap:10px; justify-content:center; margin:12px 0 16px }
+    .chip{ background:#0b1225; border:1px solid rgba(255,255,255,.08); padding:8px 10px; border-radius:999px; font-weight:600 }
+    .actions{ display:flex; justify-content:center; gap:10px }
+  </style>
 </head>
 <body>
-  <h1>¡Hola Mundo desde GitHub Pages!</h1>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Memorama</h1>
+        <div class="subtitle">Empareja todas las cartas. Usa clic o teclado (Tab + Enter).</div>
+      </div>
+      <div class="panel" role="group" aria-label="Controles del juego">
+        <button id="newGame" class="control" aria-label="Nuevo juego">🔄 Nuevo juego</button>
+        <div class="stat">Movidas: <b id="moves">0</b></div>
+        <div class="stat">Tiempo: <b id="time">00:00</b></div>
+        <div class="stat">Parejas: <b id="pairs">0/8</b></div>
+      </div>
+    </header>
+
+    <section id="board" class="board" aria-label="Tablero de memorama"></section>
+  </div>
+
+  <div id="win" class="modal" role="dialog" aria-modal="true" aria-labelledby="winTitle" aria-describedby="winDesc">
+    <div class="modal-card">
+      <h2 id="winTitle">¡Bien jugado! 🎉</h2>
+      <p id="winDesc">Has encontrado todas las parejas.</p>
+      <div class="chips">
+        <div class="chip">⏱️ <span id="finalTime">00:00</span></div>
+        <div class="chip">🎯 <span id="finalMoves">0</span> movidas</div>
+      </div>
+      <div class="actions">
+        <button id="playAgain" class="control">Jugar de nuevo</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const icons = ["🍎","🍌","🍇","🍓","🍑","🍉","🍍","🥝"]; // 8 parejas
+      const board = document.getElementById('board');
+      const movesEl = document.getElementById('moves');
+      const timeEl = document.getElementById('time');
+      const pairsEl = document.getElementById('pairs');
+      const modal = document.getElementById('win');
+      const finalTimeEl = document.getElementById('finalTime');
+      const finalMovesEl = document.getElementById('finalMoves');
+      const newGameBtn = document.getElementById('newGame');
+      const playAgainBtn = document.getElementById('playAgain');
+
+      let first = null, second = null, lock = false;
+      let moves = 0, matches = 0;
+      let seconds = 0, timer = null, started = false;
+
+      function formatTime(s){
+        const m = Math.floor(s/60).toString().padStart(2,'0');
+        const r = (s%60).toString().padStart(2,'0');
+        return `${m}:${r}`;
+      }
+      function startTimer(){ if(timer) return; timer = setInterval(()=>{ seconds++; timeEl.textContent = formatTime(seconds); }, 1000); }
+      function stopTimer(){ clearInterval(timer); timer = null; }
+
+      function shuffle(array){
+        for(let i=array.length-1;i>0;i--){
+          const j = Math.floor(Math.random()*(i+1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      function createCard(symbol){
+        const btn = document.createElement('button');
+        btn.className = 'card';
+        btn.setAttribute('aria-label','Carta oculta');
+        btn.setAttribute('data-symbol', symbol);
+        btn.innerHTML = `
+          <div class="card-inner">
+            <div class="face front">❓</div>
+            <div class="face back">${symbol}</div>
+          </div>
+        `;
+        btn.addEventListener('click', ()=> flip(btn));
+        // Hacer accesible con teclado: <button> ya maneja Enter/Espacio
+        return btn;
+      }
+
+      function flip(card){
+        if(lock) return;
+        if(card.classList.contains('flipped') || card.classList.contains('matched')) return;
+        if(!started){ started = true; startTimer(); }
+
+        card.classList.add('flipped');
+        if(!first){
+          first = card; return;
+        }
+        if(card === first){ return; }
+        second = card; lock = true; moves++; movesEl.textContent = moves;
+
+        const isMatch = first.dataset.symbol === second.dataset.symbol;
+        if(isMatch){
+          first.classList.add('matched');
+          second.classList.add('matched');
+          matches++; pairsEl.textContent = `${matches}/8`;
+          resetPick();
+          if(matches === icons.length){
+            stopTimer();
+            finalTimeEl.textContent = formatTime(seconds);
+            finalMovesEl.textContent = moves;
+            setTimeout(()=> modal.classList.add('show'), 400);
+          }
+        } else {
+          setTimeout(()=>{
+            first.classList.remove('flipped');
+            second.classList.remove('flipped');
+            resetPick();
+          }, 750);
+        }
+      }
+
+      function resetPick(){ first = null; second = null; lock = false; }
+
+      function setup(){
+        // reset state
+        first = second = null; lock = false; matches = 0; moves = 0; seconds = 0; started = false;
+        movesEl.textContent = '0';
+        timeEl.textContent = '00:00';
+        pairsEl.textContent = '0/8';
+        stopTimer();
+        modal.classList.remove('show');
+
+        // build deck
+        const deck = shuffle([...icons, ...icons]);
+        board.innerHTML = '';
+        deck.forEach(sym => board.appendChild(createCard(sym)));
+      }
+
+      newGameBtn.addEventListener('click', setup);
+      playAgainBtn.addEventListener('click', setup);
+
+      setup();
+    })();
+  </script>
 </body>
 </html>
