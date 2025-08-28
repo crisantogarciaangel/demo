@@ -6,19 +6,19 @@
   <title>DULCE</title>
   <style>
     :root{
-      /* Paleta chic */
-      --bg:#fff5f9;
-      --bg2:#fde7ff;
+      /* Paleta azul formal */
+      --bg:#f5f8ff;
+      --bg2:#e9f0ff;
       --panel:#ffffff;
-      --muted:#6b7280;
-      --text:#1f2937;
-      --primary:#ec4899;
-      --primary-2:#f472b6;
-      --accent:#a78bfa;
-      --accent-2:#c4b5fd;
+      --muted:#64748b;
+      --text:#0f172a;
+      --primary:#2563eb;   /* azul */
+      --primary-2:#1d4ed8; /* azul profundo */
+      --accent:#4f46e5;    /* índigo */
+      --accent-2:#818cf8;  /* índigo suave */
       --success:#22c55e;
-      --shadow:0 14px 30px rgba(236,72,153,.15);
-      --card-shadow:0 12px 24px rgba(167,139,250,.25);
+      --shadow:0 14px 30px rgba(37,99,235,.18);
+      --card-shadow:0 12px 24px rgba(79,70,229,.22);
       --radius:18px;
     }
 
@@ -28,7 +28,7 @@
       margin:0; font-family: ui-sans-serif, system-ui;
       background:
         radial-gradient(1400px 900px at 15% 10%, var(--bg2) 0%, var(--bg) 40%),
-        radial-gradient(1200px 800px at 85% 90%, #ffe3ef 0%, var(--bg) 45%);
+        radial-gradient(1200px 800px at 85% 90%, #edf2ff 0%, var(--bg) 45%);
       color:var(--text); display:grid; place-items:center; padding:24px;
     }
     .container{width:min(1100px, 100%);}
@@ -39,15 +39,15 @@
     .subtitle{color:var(--muted); font-size:14px}
 
     .panel{
-      background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.88));
-      border:1px solid rgba(220,176,210,.45); border-radius:16px; padding:14px 16px; box-shadow:var(--shadow);
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.9));
+      border:1px solid rgba(59,130,246,.25); border-radius:16px; padding:14px 16px; box-shadow:var(--shadow);
       display:flex; align-items:center; gap:14px; flex-wrap:wrap;
     }
     .stat{font-size:14px; color:var(--muted)}
     .stat b{color:var(--text)}
     button.control{
       background:linear-gradient(180deg, var(--primary), var(--primary-2));
-      border:none; color:white; padding:10px 16px; border-radius:999px; cursor:pointer; font-weight:700; box-shadow:0 10px 18px rgba(236,72,153,.28);
+      border:none; color:white; padding:10px 16px; border-radius:999px; cursor:pointer; font-weight:700; box-shadow:0 10px 18px rgba(37,99,235,.28);
       transition: transform .08s ease, filter .2s ease; outline:none;
     }
     button.control:hover{filter:brightness(1.06)}
@@ -56,8 +56,8 @@
     /* Tablero */
     .board{
       display:grid; gap:14px; padding:16px;
-      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.9));
-      border:1px solid rgba(220,176,210,.45); border-radius:20px; box-shadow:var(--shadow);
+      background:linear-gradient(180deg, rgba(255,255,255,.97), rgba(255,255,255,.92));
+      border:1px solid rgba(59,130,246,.22); border-radius:20px; box-shadow:var(--shadow);
       grid-template-columns: repeat(4, minmax(74px, 1fr));
     }
     @media (max-width:520px){
@@ -77,25 +77,23 @@
     }
 
     .front{
-      border:1px solid rgba(220,176,210,.5);
+      border:1px solid rgba(59,130,246,.28);
       background:
-        radial-gradient(10px 10px at 25% 30%, rgba(252,231,243,.85) 45%, transparent 46%),
-        radial-gradient(8px 8px at 70% 65%, rgba(221,214,254,.9) 45%, transparent 46%),
-        linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
-      font-size:clamp(28px, 6vw, 44px);
-      display:grid;
-      place-items:center;
+        radial-gradient(10px 10px at 25% 30%, rgba(219,234,254,.85) 45%, transparent 46%),
+        radial-gradient(8px 8px at 70% 65%, rgba(221,214,254,.85) 45%, transparent 46%),
+        linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.93));
+      display:grid; place-items:center;
     }
     .front::after{
       content:"";
       position:absolute; inset:0; border-radius:var(--radius);
-      box-shadow: inset 0 0 0 2px rgba(167,139,250,.35), 0 10px 20px rgba(188,116,160,.18);
+      box-shadow: inset 0 0 0 2px rgba(99,102,241,.35), 0 10px 20px rgba(37,99,235,.18);
     }
 
     .back{
       transform:rotateY(180deg);
-      background:linear-gradient(180deg, rgba(252,231,243,.95), rgba(221,214,254,.9));
-      border:1px solid rgba(220,176,210,.55);
+      background:linear-gradient(180deg, rgba(219,234,254,.96), rgba(199,210,254,.92));
+      border:1px solid rgba(59,130,246,.35);
       display:flex; align-items:center; justify-content:center; padding:10%; overflow:hidden;
     }
     .back img{
@@ -105,27 +103,31 @@
 
     .card.matched .back{
       animation:pop .45s ease;
-      box-shadow:0 0 0 2px rgba(167,139,250,.75), 0 16px 30px rgba(167,139,250,.35);
+      box-shadow:0 0 0 2px rgba(79,70,229,.75), 0 16px 30px rgba(79,70,229,.35);
     }
     @keyframes pop{0%{transform:rotateY(180deg) scale(1)} 50%{transform:rotateY(180deg) scale(1.06)} 100%{transform:rotateY(180deg) scale(1)}}
 
     /* Modal */
-    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(255, 240, 248, .55); backdrop-filter: blur(6px); }
+    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(226,232,240,.55); backdrop-filter: blur(6px); }
     .modal.show{ display:flex }
-    .modal-card{ background:var(--panel); border:1px solid rgba(220,176,210,.45); border-radius:18px; padding:22px 20px; width:min(420px, 92%); text-align:center; box-shadow:var(--shadow); }
+    .modal-card{ background:var(--panel); border:1px solid rgba(59,130,246,.25); border-radius:18px; padding:22px 20px; width:min(420px, 92%); text-align:center; box-shadow:var(--shadow); }
     .modal-card h2{ margin:0 0 6px 0 }
     .modal-card p{ color:var(--muted); margin:6px 0 16px }
     .chips{ display:flex; gap:10px; justify-content:center; margin:12px 0 16px }
-    .chip{ background:linear-gradient(180deg, #ffe7f3, #f7e8ff); border:1px solid rgba(220,176,210,.45); padding:8px 10px; border-radius:999px; font-weight:700; color:#7c3aed }
-    .actions{ display:flex; justify-content:center; gap:10px }
+    .chip{ background:linear-gradient(180deg, #eaf2ff, #eef2ff); border:1px solid rgba(99,102,241,.35); padding:8px 10px; border-radius:999px; font-weight:700; color:#3730a3 }
+
+    /* Ícono de frente (más sobrio) */
+    .front{ font-size:clamp(28px, 6vw, 42px); color:#1e293b }
+    .front::before{ content:"?"; }
+
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <div>
-        <h1>¬¬ ni te gusto!!!</h1>
-        <div class="subtitle">¬¬ </div>
+        <h1>Memorama</h1>
+        <div class="subtitle">Encuentra todas las parejas</div>
       </div>
       <div class="panel" role="group" aria-label="Controles del juego">
         <button id="newGame" class="control">🔄 Nuevo juego</button>
@@ -140,8 +142,8 @@
 
   <div id="win" class="modal" role="dialog" aria-modal="true">
     <div class="modal-card">
-      <h2 id="winTitle">¡Eres increíble! ✨</h2>
-      <p id="winDesc">¡Completaste todas las parejas con estilo!</p>
+      <h2 id="winTitle">¡Excelente! 🎉</h2>
+      <p id="winDesc">Completaste todas las parejas.</p>
       <div class="chips">
         <div class="chip">⏱️ <span id="finalTime">00:00</span></div>
         <div class="chip">🎯 <span id="finalMoves">0</span> movidas</div>
@@ -195,8 +197,8 @@
         btn.setAttribute('data-symbol', symbol);
         btn.innerHTML = `
           <div class="card-inner">
-            <div class="face front">❓</div>
-            <div class="face back"><img src="${symbol}" alt="carta"/></div>
+            <div class="face front"></div>
+            <div class="face back"><img src="\${symbol}" alt="carta"/></div>
           </div>
         `;
         btn.addEventListener('click', ()=> flip(btn));
