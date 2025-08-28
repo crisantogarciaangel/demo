@@ -83,12 +83,9 @@
         radial-gradient(8px 8px at 70% 65%, rgba(221,214,254,.85) 45%, transparent 46%),
         linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.93));
       display:grid; place-items:center;
+      color:#1e293b; font-size:clamp(28px, 6vw, 42px);
     }
-    .front::after{
-      content:"";
-      position:absolute; inset:0; border-radius:var(--radius);
-      box-shadow: inset 0 0 0 2px rgba(99,102,241,.35), 0 10px 20px rgba(37,99,235,.18);
-    }
+    .front::before{ content:"❓"; }
 
     .back{
       transform:rotateY(180deg);
@@ -115,11 +112,6 @@
     .modal-card p{ color:var(--muted); margin:6px 0 16px }
     .chips{ display:flex; gap:10px; justify-content:center; margin:12px 0 16px }
     .chip{ background:linear-gradient(180deg, #eaf2ff, #eef2ff); border:1px solid rgba(99,102,241,.35); padding:8px 10px; border-radius:999px; font-weight:700; color:#3730a3 }
-
-    /* Ícono de frente (más sobrio) */
-    .front{ font-size:clamp(28px, 6vw, 42px); color:#1e293b }
-    .front::before{ content:"?"; }
-
   </style>
 </head>
 <body>
@@ -198,7 +190,7 @@
         btn.innerHTML = `
           <div class="card-inner">
             <div class="face front"></div>
-            <div class="face back"><img src="\${symbol}" alt="carta"/></div>
+            <div class="face back"><img src="${symbol}" alt="carta"/></div>
           </div>
         `;
         btn.addEventListener('click', ()=> flip(btn));
